@@ -62,7 +62,7 @@ mkdir -p "$HOME/.config"
 if [ -d "$NVIM_CONFIG_DIR" ]; then
   mv "$NVIM_CONFIG_DIR" "${NVIM_CONFIG_DIR}.bak.$(date +%s)"
 fi
-git clone git@github.com-serzhby:serzhby/nvim.git "$NVIM_CONFIG_DIR"
+git clone git@github.com:serzhby/nvim.git "$NVIM_CONFIG_DIR"
 
 echo "==> Setting zsh as default shell"
 ZSH_BIN="$(command -v zsh)"
