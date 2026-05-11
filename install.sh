@@ -26,7 +26,14 @@ $SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y \
   fzf \
   zoxide \
   zsh-autosuggestions \
-  zsh-syntax-highlighting
+  zsh-syntax-highlighting \
+  neovim \
+  tree-sitter-cli \
+  lua5.4 \
+  luarocks
+
+echo "==> Installing lua packages"
+$SUDO luarocks install xml2lua
 
 # echo "==> Installing oh-my-zsh"
 # if [ ! -d "$HOME/.oh-my-zsh" ]; then
@@ -50,35 +57,6 @@ $SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y \
 # if [ "$(basename "$current_shell")" != "zsh" ]; then
 #   $SUDO chsh -s "$ZSH_BIN" "$USER"
 # fi
-
-echo "==> Installing neovim"
-ARCH="$(uname -m)"
-case "$ARCH" in
-  x86_64)  NVIM_DIR="nvim-linux-x86_64" ;;
-  aarch64) NVIM_DIR="nvim-linux-arm64" ;;
-  *)       echo "Unsupported architecture: $ARCH" >&2; exit 1 ;;
-esac
-NVIM_TARBALL="${NVIM_DIR}.tar.gz"
-TMP_TGZ="$(mktemp --suffix=.tar.gz)"
-trap 'rm -f "$TMP_TGZ"' EXIT
-curl -fsSL -o "$TMP_TGZ" \
-  "https://github.com/neovim/neovim/releases/latest/download/${NVIM_TARBALL}"
-$SUDO rm -rf "/opt/${NVIM_DIR}"
-$SUDO tar -C /opt -xzf "$TMP_TGZ"
-$SUDO ln -sf "/opt/${NVIM_DIR}/bin/nvim" /usr/local/bin/nvim
-
-echo "==> Installing tree-sitter"
-case "$ARCH" in
-  x86_64)  TS_ASSET="tree-sitter-linux-x64.gz" ;;
-  aarch64) TS_ASSET="tree-sitter-linux-arm64.gz" ;;
-esac
-TS_TMP_GZ="$(mktemp --suffix=.gz)"
-TS_TMP_BIN="${TS_TMP_GZ%.gz}"
-trap 'rm -f "$TMP_TGZ" "$TS_TMP_GZ" "$TS_TMP_BIN"' EXIT
-curl -fsSL -o "$TS_TMP_GZ" \
-  "https://github.com/tree-sitter/tree-sitter/releases/latest/download/${TS_ASSET}"
-gunzip -f "$TS_TMP_GZ"
-$SUDO install -m 0755 "$TS_TMP_BIN" /usr/local/bin/tree-sitter
 
 echo "==> Cloning neovim configuration"
 NVIM_CONFIG_DIR="$HOME/.config/nvim"
