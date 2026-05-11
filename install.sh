@@ -74,3 +74,4 @@ if [ "$(getent passwd "$USER" | cut -d: -f7)" != "$ZSH_BIN" ]; then
 fi
 
 echo "==> Done. Start a new shell or run: exec zsh"
+exit 0
