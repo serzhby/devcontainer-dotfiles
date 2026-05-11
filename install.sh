@@ -50,11 +50,11 @@ $SUDO rm -rf "/opt/${NVIM_DIR}"
 $SUDO tar -C /opt -xzf "$TMP_TGZ"
 $SUDO ln -sf "/opt/${NVIM_DIR}/bin/nvim" /usr/local/bin/nvim
 
-echo "==> Installing .zshrc"
-if [ -e "$HOME/.zshrc" ] && [ ! -L "$HOME/.zshrc" ]; then
-  cp "$HOME/.zshrc" "$HOME/.zshrc.bak.$(date +%s)"
-fi
-cp "$SCRIPT_DIR/.zshrc" "$HOME/.zshrc"
+# echo "==> Installing .zshrc"
+# if [ -e "$HOME/.zshrc" ] && [ ! -L "$HOME/.zshrc" ]; then
+#   cp "$HOME/.zshrc" "$HOME/.zshrc.bak.$(date +%s)"
+# fi
+# cp "$SCRIPT_DIR/.zshrc" "$HOME/.zshrc"
 
 echo "==> Cloning neovim configuration"
 NVIM_CONFIG_DIR="$HOME/.config/nvim"
@@ -64,15 +64,14 @@ if [ -d "$NVIM_CONFIG_DIR" ]; then
 fi
 git clone git@github.com:serzhby/nvim.git "$NVIM_CONFIG_DIR"
 
-echo "==> Setting zsh as default shell"
-ZSH_BIN="$(command -v zsh)"
-if ! grep -qx "$ZSH_BIN" /etc/shells 2>/dev/null; then
-  echo "$ZSH_BIN" | $SUDO tee -a /etc/shells >/dev/null
-fi
-current_shell="$(getent passwd "$USER" | cut -d: -f7)"
-if [ "$(basename "$current_shell")" != "zsh" ]; then
-  $SUDO chsh -s "$ZSH_BIN" "$USER"
-fi
+# echo "==> Setting zsh as default shell"
+# ZSH_BIN="$(command -v zsh)"
+# if ! grep -qx "$ZSH_BIN" /etc/shells 2>/dev/null; then
+#   echo "$ZSH_BIN" | $SUDO tee -a /etc/shells >/dev/null
+# fi
+# current_shell="$(getent passwd "$USER" | cut -d: -f7)"
+# if [ "$(basename "$current_shell")" != "zsh" ]; then
+#   $SUDO chsh -s "$ZSH_BIN" "$USER"
+# fi
 
 echo "==> Done. Start a new shell or run: exec zsh"
-exit 0
