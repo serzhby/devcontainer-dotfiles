@@ -25,12 +25,11 @@ $SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y \
   fzf \
   zoxide \
   neovim \
-  tree-sitter-cli \
   lua5.4 \
   luarocks
 
-echo "==> Installing lua packages"
-$SUDO luarocks install xml2lua
+# echo "==> Installing lua packages"
+# $SUDO luarocks install xml2lua
 
 # echo "==> Installing oh-my-zsh"
 # if [ ! -d "$HOME/.oh-my-zsh" ]; then
