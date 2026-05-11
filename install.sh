@@ -24,7 +24,6 @@ $SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y \
   unzip \
   fzf \
   zoxide \
-  neovim \
   lua5.4 \
   luarocks
 
@@ -53,6 +52,22 @@ $SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y \
 # if [ "$(basename "$current_shell")" != "zsh" ]; then
 #   $SUDO chsh -s "$ZSH_BIN" "$USER"
 # fi
+
+echo "==> Installing neovim"
+ARCH="$(uname -m)"
+case "$ARCH" in
+  x86_64)  NVIM_DIR="nvim-linux-x86_64" ;;
+  aarch64) NVIM_DIR="nvim-linux-arm64" ;;
+  *)       echo "Unsupported architecture: $ARCH" >&2; exit 1 ;;
+esac
+NVIM_TARBALL="${NVIM_DIR}.tar.gz"
+TMP_TGZ="$(mktemp --suffix=.tar.gz)"
+trap 'rm -f "$TMP_TGZ"' EXIT
+curl -fsSL -o "$TMP_TGZ" \
+  "https://github.com/neovim/neovim/releases/latest/download/${NVIM_TARBALL}"
+$SUDO rm -rf "/opt/${NVIM_DIR}"
+$SUDO tar -C /opt -xzf "$TMP_TGZ"
+$SUDO ln -sf "/opt/${NVIM_DIR}/bin/nvim" /usr/local/bin/nvim
 
 echo "==> Cloning neovim configuration"
 NVIM_CONFIG_DIR="$HOME/.config/nvim"
