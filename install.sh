@@ -67,6 +67,19 @@ $SUDO rm -rf "/opt/${NVIM_DIR}"
 $SUDO tar -C /opt -xzf "$TMP_TGZ"
 $SUDO ln -sf "/opt/${NVIM_DIR}/bin/nvim" /usr/local/bin/nvim
 
+echo "==> Installing tree-sitter"
+case "$ARCH" in
+  x86_64)  TS_ASSET="tree-sitter-linux-x64.gz" ;;
+  aarch64) TS_ASSET="tree-sitter-linux-arm64.gz" ;;
+esac
+TS_TMP_GZ="$(mktemp --suffix=.gz)"
+TS_TMP_BIN="${TS_TMP_GZ%.gz}"
+trap 'rm -f "$TMP_TGZ" "$TS_TMP_GZ" "$TS_TMP_BIN"' EXIT
+curl -fsSL -o "$TS_TMP_GZ" \
+  "https://github.com/tree-sitter/tree-sitter/releases/latest/download/${TS_ASSET}"
+gunzip -f "$TS_TMP_GZ"
+$SUDO install -m 0755 "$TS_TMP_BIN" /usr/local/bin/tree-sitter
+
 echo "==> Cloning neovim configuration"
 NVIM_CONFIG_DIR="$HOME/.config/nvim"
 mkdir -p "$HOME/.config"
