@@ -1,14 +1,6 @@
 # Keep path-like arrays unique
 typeset -U path cdpath fpath manpath
 
-# zsh-autosuggestions
-for f in \
-  /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh \
-  /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh; do
-  [[ -r $f ]] && source "$f" && break
-done
-ZSH_AUTOSUGGEST_STRATEGY=(history)
-
 # oh-my-zsh
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="robbyrussell"
@@ -46,10 +38,18 @@ setopt HIST_FCNTL_LOCK HIST_IGNORE_DUPS HIST_IGNORE_SPACE SHARE_HISTORY
 setopt NO_APPEND_HISTORY NO_EXTENDED_HISTORY NO_HIST_EXPIRE_DUPS_FIRST
 setopt NO_HIST_FIND_NO_DUPS NO_HIST_IGNORE_ALL_DUPS NO_HIST_SAVE_NO_DUPS
 
-# zsh-syntax-highlighting (source last)
+# zsh-syntax-highlighting (must be sourced before zsh-autosuggestions)
 for f in \
   /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
   /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh; do
   [[ -r $f ]] && source "$f" && break
 done
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main)
+
+# zsh-autosuggestions (must be sourced last so its widgets wrap everything else)
+for f in \
+  /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh \
+  /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh; do
+  [[ -r $f ]] && source "$f" && break
+done
+ZSH_AUTOSUGGEST_STRATEGY=(history)
