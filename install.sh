@@ -17,7 +17,6 @@ fi
 echo "==> Installing system packages"
 $SUDO apt-get update
 $SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y \
-  zsh \
   git \
   curl \
   ca-certificates \
@@ -25,8 +24,6 @@ $SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y \
   unzip \
   fzf \
   zoxide \
-  zsh-autosuggestions \
-  zsh-syntax-highlighting \
   neovim \
   tree-sitter-cli \
   lua5.4 \
