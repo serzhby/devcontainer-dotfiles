@@ -69,7 +69,8 @@ ZSH_BIN="$(command -v zsh)"
 if ! grep -qx "$ZSH_BIN" /etc/shells 2>/dev/null; then
   echo "$ZSH_BIN" | $SUDO tee -a /etc/shells >/dev/null
 fi
-if [ "$(getent passwd "$USER" | cut -d: -f7)" != "$ZSH_BIN" ]; then
+current_shell="$(getent passwd "$USER" | cut -d: -f7)"
+if [ "$(basename "$current_shell")" != "zsh" ]; then
   $SUDO chsh -s "$ZSH_BIN" "$USER"
 fi
 
