@@ -70,6 +70,9 @@ $SUDO tar -C /opt -xzf "$TMP_TGZ"
 $SUDO ln -sf "/opt/${NVIM_DIR}/bin/nvim" /usr/local/bin/nvim
 
 echo "==> Installing tree-sitter"
+# Pin to v0.24.7: later releases are built on Ubuntu 24.04 and require GLIBC 2.39,
+# which is unavailable on Ubuntu 22.04 / Debian 12 devcontainers.
+TS_VERSION="v0.24.7"
 case "$ARCH" in
   x86_64)  TS_ASSET="tree-sitter-linux-x64.gz" ;;
   aarch64) TS_ASSET="tree-sitter-linux-arm64.gz" ;;
@@ -78,7 +81,7 @@ esac
 TMP_TS_GZ="$(mktemp --suffix=.gz)"
 trap 'rm -f "$TMP_TGZ" "$TMP_TS_GZ"' EXIT
 curl -fsSL -o "$TMP_TS_GZ" \
-  "https://github.com/tree-sitter/tree-sitter/releases/latest/download/${TS_ASSET}"
+  "https://github.com/tree-sitter/tree-sitter/releases/download/${TS_VERSION}/${TS_ASSET}"
 gunzip -f "$TMP_TS_GZ"
 $SUDO install -m 0755 "${TMP_TS_GZ%.gz}" /usr/local/bin/tree-sitter
 rm -f "${TMP_TS_GZ%.gz}"
