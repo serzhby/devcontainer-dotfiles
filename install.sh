@@ -69,6 +69,20 @@ $SUDO rm -rf "/opt/${NVIM_DIR}"
 $SUDO tar -C /opt -xzf "$TMP_TGZ"
 $SUDO ln -sf "/opt/${NVIM_DIR}/bin/nvim" /usr/local/bin/nvim
 
+echo "==> Installing tree-sitter"
+case "$ARCH" in
+  x86_64)  TS_ASSET="tree-sitter-linux-x64.gz" ;;
+  aarch64) TS_ASSET="tree-sitter-linux-arm64.gz" ;;
+  *)       echo "Unsupported architecture: $ARCH" >&2; exit 1 ;;
+esac
+TMP_TS_GZ="$(mktemp --suffix=.gz)"
+trap 'rm -f "$TMP_TGZ" "$TMP_TS_GZ"' EXIT
+curl -fsSL -o "$TMP_TS_GZ" \
+  "https://github.com/tree-sitter/tree-sitter/releases/latest/download/${TS_ASSET}"
+gunzip -f "$TMP_TS_GZ"
+$SUDO install -m 0755 "${TMP_TS_GZ%.gz}" /usr/local/bin/tree-sitter
+rm -f "${TMP_TS_GZ%.gz}"
+
 echo "==> Cloning neovim configuration"
 NVIM_CONFIG_DIR="$HOME/.config/nvim"
 mkdir -p "$HOME/.config"
